@@ -48,34 +48,31 @@ Example(s):
 /* LIBNAME validation */
 %if %length(&lib) > 8 %then
 	%do;
-		%put ==========================================;
-		%put = ERROR                                  =;
-		%put = Invalid LIBNAME                        =;
-		%put = Library names but be 1 to 8 characters =;
-		%put =     and cannot begin with a number.    =;
-		%put ==========================================;
+		%put =============================================;
+		%put = ERROR                                     =;
+		%put = Invalid LIBNAME                           =;
+		%put = Library names must less than 8 characters =;
+		%put =     and cannot begin with a number.       =;
+		%put =============================================;
 		%put;
 		%put ==========================================;
 		%put = The macro will stop execution          =;
 		%put ==========================================;
 		%return;
 	%end;
-%else %if %sysfunc(verify(&data,&check)) > 0 %then
+%if %sysfunc(verify(&lib,&check)) > 0 %then
 	%do;
-		%put ==========================================;
-		%put = ERROR                                  =;
-		%put = Invalid LIBNAME                        =;
-		%put = Library names but be 1 to 8 characters =;
-		%put =     and cannot begin with a number.    =;
-		%put ==========================================;
+		%put ============================================;
+		%put = ERROR                                    =;
+		%put = Invalid LIBNAME                          =;
+		%put = Library names cannot begin with a number.=;
+		%put ============================================;
 		%put;
-		%put ==========================================;
-		%put = The macro will stop execution          =;
-		%put ==========================================;
+		%put ============================================;
+		%put = The macro will stop execution            =;
+		%put ============================================;
 		%return;
 	%end;
-%else 
-	%put LIBNAME is &lib.;
 /* Dataset validation */
 %if %length(&data) = 0 %then
 	%do;
@@ -90,12 +87,12 @@ Example(s):
 		%put ==========================================;
 		%return;
 	%end;
-%else %if %sysfunc(verify(&data,&check)) > 0 %then
+%if %sysfunc(verify(&data,&check)) > 0 %then
 	%do;
 		%put =================================================;
 		%put  ERROR;
 		%put  Invalid Dataset;
-		%put  Dataset names and cannot begin with a number.;
+		%put  Dataset cannot begin with a number.;
 		%put =================================================;
 		%put;
 		%put =================================================;
@@ -103,8 +100,6 @@ Example(s):
 		%put =================================================;
 		%return;
 	%end;
-%else 
-	%put Dataset is &data.;
 /* Output dataset validation */
 %if %sysfunc(verify(&out,&check)) > 0 %then
 	%do;
@@ -119,9 +114,6 @@ Example(s):
 		%put =================================================;
 		%return;
 	%end;
-%else 
-	%put Output dataset is &out.;
-
 /* Conversion */
 title "Before conversion";
 proc contents data=&lib..&data.;
