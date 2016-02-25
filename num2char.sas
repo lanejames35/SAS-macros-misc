@@ -44,15 +44,27 @@ Example(s):
 
 %macro num2char(lib=work,data=,out=conversion);
 %local check;
-%let check=abcdefghijklmnopqrstuvwxyz;
+%let check=abcdefghijklmnopqrstuvwxyz_;
 /* LIBNAME validation */
 %if %length(&lib) > 8 %then
+	%do;
+		%put ================================================;
+		%put = ERROR                                        =;
+		%put = Invalid LIBNAME                              =;
+		%put = Library names must be less than 8 characters =;
+		%put ================================================;
+		%put;
+		%put ==========================================;
+		%put = The macro will stop execution          =;
+		%put ==========================================;
+		%return;
+	%end;
+%if %sysfunc(verify(&data,&check)) = 1 %then
 	%do;
 		%put =============================================;
 		%put = ERROR                                     =;
 		%put = Invalid LIBNAME                           =;
-		%put = Library names must less than 8 characters =;
-		%put =     and cannot begin with a number.       =;
+		%put = Library names cannot begin with a number. =;
 		%put =============================================;
 		%put;
 		%put ==========================================;
@@ -60,26 +72,13 @@ Example(s):
 		%put ==========================================;
 		%return;
 	%end;
-%if %sysfunc(verify(&lib,&check)) > 0 %then
-	%do;
-		%put ============================================;
-		%put = ERROR                                    =;
-		%put = Invalid LIBNAME                          =;
-		%put = Library names cannot begin with a number.=;
-		%put ============================================;
-		%put;
-		%put ============================================;
-		%put = The macro will stop execution            =;
-		%put ============================================;
-		%return;
-	%end;
 /* Dataset validation */
 %if %length(&data) = 0 %then
 	%do;
 		%put ==========================================;
 		%put  ERROR;
-		%put  Invalid Dataset;
-		%put  You must specify a dataset name.;
+		%put  Invalid dataset;
+		%put  You must specify a dataset.;
 		%put ==========================================;
 		%put;
 		%put ==========================================;
@@ -87,12 +86,12 @@ Example(s):
 		%put ==========================================;
 		%return;
 	%end;
-%if %sysfunc(verify(&data,&check)) > 0 %then
+%if %sysfunc(verify(&data,&check)) = 1 %then
 	%do;
 		%put =================================================;
-		%put  ERROR;
-		%put  Invalid Dataset;
-		%put  Dataset cannot begin with a number.;
+		%put  ERROR;									
+		%put  Invalid dataset;
+		%put  Dataset names cannot begin with a number.;
 		%put =================================================;
 		%put;
 		%put =================================================;
@@ -101,12 +100,12 @@ Example(s):
 		%return;
 	%end;
 /* Output dataset validation */
-%if %sysfunc(verify(&out,&check)) > 0 %then
+%if %sysfunc(verify(&out,&check)) = 1 %then
 	%do;
 		%put =================================================;
 		%put  ERROR;
-		%put  Invalid Output Dataset;
-		%put  Dataset names and cannot begin with a number.;
+		%put  Invalid output dataset;
+		%put  Dataset names cannot begin with a number.;
 		%put =================================================;
 		%put;
 		%put =================================================;
