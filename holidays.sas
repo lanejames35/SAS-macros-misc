@@ -2,7 +2,7 @@ data holidays;
 	length HolidayName $ 30;
 	array WkDayShift [7] _temporary_ (1 5*0 -1);
 	retain Easter 1;
-	retain ShiftToggle  /*0*/ 1; /* Use zero to turn of the weekday shifting of holidays */
+	retain ShiftToggle  /*0*/ 1; /* Use zero to turn off the weekday shifting of holidays */
 	year = 2016;
 /*	do Year = 2015 to 2070;*/
 		*New Year's Day -- 1 Jan if not Mon 2 Jan.;
